@@ -20,6 +20,8 @@ public class Producer {
             producer = new KafkaProducer<>(properties);
         }
 
+        long startTime = System.currentTimeMillis();
+
         try {
             for (int i = 0; i < 100000; i++) {
                 producer.send(new ProducerRecord<String, String>(
@@ -38,6 +40,10 @@ public class Producer {
                     System.out.println("Sent message number " + i);
                 }
             }
+
+            long duration = System.currentTimeMillis() - startTime;
+            System.out.println("duration " + duration + " ms");
+
         } catch (Throwable throwable) {
             System.out.println(throwable.getStackTrace());
         } finally {

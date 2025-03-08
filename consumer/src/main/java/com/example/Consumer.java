@@ -21,20 +21,30 @@ public class Consumer {
         }
         consumer.subscribe(Arrays.asList("user-events", "global-events"));
 
-        while (true) {
-            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+        long overallDuration = 0;
 
-            for (ConsumerRecord<String, String> record : records) {
-                switch (record.topic()) {
-                    case "user-events":
-                        System.out.println("Received user-events message - key: " + record.key() + " value: " + record.value());
-                        break;
-                    case "global-events":
-                        System.out.println("Received global-events message - value: " + record.value());
-                        break;
-                    default:
-                        throw new IllegalStateException("Shouldn't be possible to get message on topic " + record.topic());
+        while (true) {
+            long startTime = System.currentTimeMillis();
+
+            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+            if(!records.isEmpty()) {
+                for (ConsumerRecord<String, String> record : records) {
+                    switch (record.topic()) {
+                        case "user-events":
+                            System.out.println("Received user-events message - key: " + record.key() + " value: " + record.value());
+                            break;
+                        case "global-events":
+                            System.out.println("Received global-events message - value: " + record.value());
+                            break;
+                        default:
+                            throw new IllegalStateException("Shouldn't be possible to get message on topic " + record.topic());
+                    }
                 }
+            }
+            long duration = System.currentTimeMillis() - startTime;
+            overallDuration += duration;
+            if(overallDuration != 0){
+                System.out.println("duration: " + overallDuration + " ms");
             }
         }
     }
