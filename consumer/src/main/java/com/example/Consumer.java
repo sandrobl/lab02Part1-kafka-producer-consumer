@@ -40,11 +40,11 @@ public class Consumer {
                             throw new IllegalStateException("Shouldn't be possible to get message on topic " + record.topic());
                     }
                 }
-            }
-            long duration = System.currentTimeMillis() - startTime;
-            overallDuration += duration;
-            if(overallDuration != 0){
-                System.out.println("duration: " + overallDuration + " ms");
+                long duration = System.currentTimeMillis() - startTime;
+                overallDuration += duration;
+                if(overallDuration != 0){
+                    System.out.println("duration: " + overallDuration + " ms");
+                }
             }
         }
     }
